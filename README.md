@@ -26,11 +26,6 @@ This a fork of the Style Guide
 
 ## Source Code Layout
 
-> Nearly everybody is convinced that every style but their own is
-> ugly and unreadable. Leave out the "but their own" and they're
-> probably right... <br/>
-> -- Jerry Coffin (on indentation)
-
 * <a name="utf-8"></a>
   Use `UTF-8` as the source file encoding.
 <sup>[[link](#utf-8)]</sup>
@@ -56,13 +51,6 @@ This a fork of the Style Guide
   default, Windows users have to be extra careful.)
 <sup>[[link](#crlf)]</sup>
 
-  * If you're using Git you might want to add the following
-    configuration setting to protect your project from Windows line
-    endings creeping in:
-
-    ```bash
-    $ git config --global core.autocrlf true
-    ```
 
 * <a name="no-semicolon"></a>
   Don't use `;` to separate statements and expressions. As a corollary - use one
@@ -94,10 +82,10 @@ This a fork of the Style Guide
   end
 
   # okish
-  class FooError < StandardError; end
+  FooError = Class.new(StandardError)
 
   # good
-  FooError = Class.new(StandardError)
+  class FooError < StandardError; end
   ```
 
 * <a name="no-single-line-methods"></a>
@@ -111,14 +99,14 @@ This a fork of the Style Guide
   # bad
   def too_much; something; something_else; end
 
+  # bad - valid syntax, but hard to read
+  def some_method() body end
+
   # okish - notice that the first ; is required
   def no_braces_method; body end
 
   # okish - notice that the second ; is optional
   def no_braces_method; body; end
-
-  # okish - valid syntax, but no ; makes it kind of hard to read
-  def some_method() body end
 
   # good
   def some_method
@@ -161,33 +149,23 @@ This a fork of the Style Guide
   strings. For hash literals two styles are considered acceptable.
 
   ```Ruby
+  # bad - no space after { and before }
+  {one: 1, two: 2}
+
   # good - space after { and before }
   { one: 1, two: 2 }
 
-  # good - no space after { and before }
-  {one: 1, two: 2}
   ```
 
-  The first variant is slightly more readable (and arguably more
-  popular in the Ruby community in general). The second variant has
-  the advantage of adding visual difference between block and hash
-  literals. Whichever one you pick - apply it consistently.
-
-  As far as embedded expressions go, there are also two acceptable
-  options:
+  As far as embedded expressions go do not have spaces as above:
 
   ```Ruby
+  # bad - arguably more readable
+  "string#{ expr }"
+
   # good - no spaces
   "string#{expr}"
-
-  # ok - arguably more readable
-  "string#{ expr }"
   ```
-
-  The first style is extremely more popular and you're generally
-  advised to stick with it. The second, on the other hand, is
-  (arguably) a bit more readable. As with hashes - pick one style
-  and apply it consistently.
 
 * <a name="no-spaces-braces"></a>
   No spaces after `(`, `[` or before `]`, `)`.
@@ -227,11 +205,13 @@ This a fork of the Style Guide
 * <a name="indent-when-to-case"></a>
   Indent `when` as deep as `case`. I know that many would disagree
   with this one, but it's the style established in both "The Ruby
-  Programming Language" and "Programming Ruby".
+  Programming Language" and "Programming Ruby". CHM: I can actually go either
+  way on this one, but we should pick one.
+
 <sup>[[link](#indent-when-to-case)]</sup>
 
   ```Ruby
-  # bad
+  # good
   case
     when song.name == 'Misty'
       puts 'Not again!'
@@ -448,7 +428,7 @@ This a fork of the Style Guide
         body: source.text)
   end
 
-  # good
+  # okish
   def send_mail(source)
     Mailer.deliver(to: 'bob@example.com',
                    from: 'us@example.com',
@@ -456,13 +436,13 @@ This a fork of the Style Guide
                    body: source.text)
   end
 
-  # good (normal indent)
+  # best (normal indent with param values aligned)
   def send_mail(source)
     Mailer.deliver(
-      to: 'bob@example.com',
-      from: 'us@example.com',
+      to:      'bob@example.com',
+      from:    'us@example.com',
       subject: 'Important message',
-      body: source.text
+      body:    source.text
     )
   end
   ```
@@ -506,7 +486,7 @@ This a fork of the Style Guide
 <sup>[[link](#rdoc-conventions)]</sup>
 
 * <a name="80-character-limits"></a>
-  Limit lines to 80 characters.
+  Limit lines to 120 characters.
 <sup>[[link](#80-character-limits)]</sup>
 
 * <a name="no-trailing-whitespace"></a>

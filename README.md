@@ -3,9 +3,9 @@
 By the way, if you're into Rails you might want to check out the complementary
 [Ruby on Rails Style Guide][rails-style-guide].
 
-# The Ruby Style Guide
+# The Urbanspoon Ruby Style Guide
 
-This a fork of the Style Guide 
+This a fork of the Style Guide by bbatsov.
 
 ## Table of Contents
 
@@ -211,7 +211,7 @@ This a fork of the Style Guide
 <sup>[[link](#indent-when-to-case)]</sup>
 
   ```Ruby
-  # good
+  # bad
   case
     when song.name == 'Misty'
       puts 'Not again!'

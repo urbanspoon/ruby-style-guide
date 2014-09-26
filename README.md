@@ -274,8 +274,8 @@ This a fork of the Style Guide by bbatsov.
              calc_something_else
            end
 
-  # good (and a bit more width efficient)
-  kind =
+  # good - if what you're assign to is a bit long
+  monkey.father.favorite_music =
     case year
     when 1850..1889 then 'Blues'
     when 1890..1909 then 'Ragtime'
@@ -285,7 +285,7 @@ This a fork of the Style Guide by bbatsov.
     else 'Jazz'
     end
 
-  result =
+  monkey.father.favorite_music =
     if some_cond
       calc_something
     else
@@ -349,9 +349,6 @@ This a fork of the Style Guide by bbatsov.
   end
   ```
 
-  While several Ruby books suggest the first style, the second is much more
-  prominent in practice (and arguably a bit more readable).
-
 * <a name="no-trailing-backslash"></a>
   Avoid line continuation `\` where not required. In practice, avoid using
   line continuations for anything but string concatenation.
@@ -371,10 +368,7 @@ This a fork of the Style Guide by bbatsov.
   ```
 
 * <a name="consistent-multi-line-chains"></a>
-    Adopt a consistent multi-line method chaining style. There are two
-    popular styles in the Ruby community, both of which are considered
-    good - leading `.` (Option A) and trailing `.` (Option B).
-<sup>[[link](#consistent-multi-line-chains)]</sup>
+    Multi-line method chaining style.
 
   * **(Option A)** When continuing a chained method invocation on
     another line keep the `.` on the second line.
@@ -385,26 +379,10 @@ This a fork of the Style Guide by bbatsov.
       four
 
     # good - it's immediately clear what's going on the second line
-    one.two.three
+    one.two
+      .three
       .four
     ```
-
-  * **(Option B)** When continuing a chained method invocation on another line,
-    include the `.` on the first line to indicate that the
-    expression continues.
-
-    ```Ruby
-    # bad - need to read ahead to the second line to know that the chain continues
-    one.two.three
-      .four
-
-    # good - it's immediately clear that the expression continues beyond the first line
-    one.two.three.
-      four
-    ```
-
-  A discussion on the merits of both alternative styles can be found
-  [here](https://github.com/bbatsov/ruby-style-guide/pull/176).
 
 * <a name="no-double-indent"></a>
     Align the parameters of a method call if they span more than one

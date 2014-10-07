@@ -434,16 +434,28 @@ This a fork of the Style Guide by bbatsov.
   menu_item = ['Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam',
     'Baked beans', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam']
 
+  # not so hot
+  menu_item =
+    ['Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam',
+     'Baked beans', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam']
+
   # good
   menu_item = [
     'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam',
     'Baked beans', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam'
   ]
 
-  # good
-  menu_item =
-    ['Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam',
-     'Baked beans', 'Spam', 'Spam', 'Spam', 'Spam', 'Spam']
+  # best when array elements are longish strings/symbols/etc.
+  # if no other order is obvious alphabetize.
+  menu_item = [
+    'cats-spam-spam-spam-spam-spam-spam',
+    'dogs-spam-spam-spam-spam',
+    'goats-spam-spam-spam-spam',
+    'horses-spam-spam-spam-spam',
+    'sheep-spam-spam-spam-spam',
+    'turtles-spam-spam-spam-spam'
+  ]
+
   ```
 
 * <a name="underscores-in-numerics"></a>
@@ -458,10 +470,6 @@ This a fork of the Style Guide by bbatsov.
   num = 1_000_000
   ```
 
-* <a name="rdoc-conventions"></a>
-    Use RDoc and its conventions for API documentation.  Don't put an
-    empty line between the comment block and the `def`.
-<sup>[[link](#rdoc-conventions)]</sup>
 
 * <a name="80-character-limits"></a>
   Limit lines to 120 characters.
@@ -513,7 +521,7 @@ This a fork of the Style Guide by bbatsov.
   ```
 
 * <a name="method-parens"></a>
-    Use `def` with parentheses when there are arguments. Omit the
+    Use `def` with with parentheses when there are arguments. Omit the
     parentheses when the method doesn't accept any arguments.
 <sup>[[link](#method-parens)]</sup>
 
@@ -528,13 +536,13 @@ This a fork of the Style Guide by bbatsov.
      # body omitted
    end
 
-   # bad
-   def some_method_with_arguments arg1, arg2
+   # not so good
+   def some_method_with_arguments(arg1, arg2)
      # body omitted
    end
 
    # good
-   def some_method_with_arguments(arg1, arg2)
+   def some_method_with_arguments arg1, arg2
      # body omitted
    end
    ```
@@ -602,8 +610,9 @@ This a fork of the Style Guide by bbatsov.
   ```
 
 * <a name="ternary-operator"></a>
-  Favor the ternary operator(`?:`) over `if/then/else/end` constructs.
-  It's more common and obviously more concise.
+  Favor the ternary operator(`?:`) over single line `if/then/else/end` constructs.
+  It's more common and obviously more concise. Don't use ternary with complex
+  conditionals or expressions
 <sup>[[link](#ternary-operator)]</sup>
 
   ```Ruby
@@ -732,7 +741,7 @@ This a fork of the Style Guide by bbatsov.
     do_something
   end
 
-  # control flow
+  # bad control flow, just put on separate lines
   document.saved? || document.save!
   ```
 
@@ -756,6 +765,9 @@ This a fork of the Style Guide by bbatsov.
 
   # another good option
   some_condition && do_something
+
+  # bad option, use separate lines
+  some_condition || do_something
   ```
 
 * <a name="no-multiline-if-modifiers"></a>

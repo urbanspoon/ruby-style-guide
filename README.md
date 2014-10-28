@@ -1798,6 +1798,13 @@ condition](#safe-assignment-in-condition).
   code and before the `#`.
 <sup>[[link](#hash-space)]</sup>
 
+  ```Ruby
+  # bad
+  #this is a comment
+
+  # good
+  # This is a comment.
+
 * <a name="english-syntax"></a>
   Comments longer than a word are capitalized and use punctuation. Use [one
   space](http://en.wikipedia.org/wiki/Sentence_spacing) after periods.
@@ -1843,7 +1850,7 @@ condition](#safe-assignment-in-condition).
   ```
 
   ```Ruby
-  # best when there are multi-line comments followed by multi-line blocks of
+  # Best when there are multi-line comments followed by multi-line blocks of
   # code that the comment is about. This format is also preferable for
   # single line comments, but can result in a ton of vertical whitespace
   # that is not always helpful. Use your best judgement.

@@ -926,7 +926,7 @@ condition](#safe-assignment-in-condition).
     attr_reader :name, :age
   end
 
-  temperance = Person.new Temperance', 30
+  temperance = Person.new Temperance.new, 30
   temperance.name
 
   puts temperance.age

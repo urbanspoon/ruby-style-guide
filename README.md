@@ -146,7 +146,7 @@ This a fork of the Style Guide by bbatsov.
 
   `{` and `}` deserve a bit of clarification, since they are used
   for block and hash literals, as well as embedded expressions in
-  strings. For hash literals two styles are considered acceptable.
+  strings.
 
   ```Ruby
   # bad - no space after { and before }
@@ -157,10 +157,11 @@ This a fork of the Style Guide by bbatsov.
 
   ```
 
-  As far as embedded expressions go do not have spaces as above:
+  As far as embedded expressions go do not have spaces as
+  above in string interpolation:
 
   ```Ruby
-  # bad - arguably more readable
+  # bad
   "string#{ expr }"
 
   # good - no spaces
@@ -205,8 +206,7 @@ This a fork of the Style Guide by bbatsov.
 * <a name="indent-when-to-case"></a>
   Indent `when` as deep as `case`. I know that many would disagree
   with this one, but it's the style established in both "The Ruby
-  Programming Language" and "Programming Ruby". CHM: I can actually go either
-  way on this one, but we should pick one.
+  Programming Language" and "Programming Ruby".
 
 <sup>[[link](#indent-when-to-case)]</sup>
 
@@ -300,7 +300,7 @@ This a fork of the Style Guide by bbatsov.
 
   ```Ruby
   def some_method
-    data = initialize(options)
+    data = initialize options
 
     data.manipulate!
 
@@ -319,17 +319,16 @@ This a fork of the Style Guide by bbatsov.
 
   ```Ruby
   # bad - easier to move/add/remove parameters, but still not preferred
-  some_method(
-               size,
-               count,
-               color,
-             )
+  some_method size,
+              count,
+              color,
+
 
   # bad
-  some_method(size, count, color, )
+  some_method size, count, color,
 
   # good
-  some_method(size, count, color)
+  some_method size, count, color
   ```
 
 * <a name="spaces-around-equals"></a>
@@ -339,12 +338,12 @@ This a fork of the Style Guide by bbatsov.
 
   ```Ruby
   # bad
-  def some_method(arg1=:default, arg2=nil, arg3=[])
+  def some_method arg1=:default, arg2=nil, arg3=[]
     # do something...
   end
 
   # good
-  def some_method(arg1 = :default, arg2 = nil, arg3 = [])
+  def some_method arg1 = :default, arg2 = nil, arg3 = []
     # do something...
   end
   ```
@@ -393,12 +392,12 @@ This a fork of the Style Guide by bbatsov.
 
   ```Ruby
   # starting point (line is too long)
-  def send_mail(source)
+  def send_mail source
     Mailer.deliver(to: 'bob@example.com', from: 'us@example.com', subject: 'Important message', body: source.text)
   end
 
   # bad (double indent)
-  def send_mail(source)
+  def send_mail source
     Mailer.deliver(
         to: 'bob@example.com',
         from: 'us@example.com',
@@ -407,7 +406,7 @@ This a fork of the Style Guide by bbatsov.
   end
 
   # okish
-  def send_mail(source)
+  def send_mail source
     Mailer.deliver(to: 'bob@example.com',
                    from: 'us@example.com',
                    subject: 'Important message',
@@ -415,7 +414,7 @@ This a fork of the Style Guide by bbatsov.
   end
 
   # best (normal indent with param values aligned)
-  def send_mail(source)
+  def send_mail source
     Mailer.deliver(
       to:      'bob@example.com',
       from:    'us@example.com',
@@ -470,7 +469,6 @@ This a fork of the Style Guide by bbatsov.
   num = 1_000_000
   ```
 
-
 * <a name="80-character-limits"></a>
   Limit lines to 120 characters.
 <sup>[[link](#80-character-limits)]</sup>
@@ -521,23 +519,12 @@ This a fork of the Style Guide by bbatsov.
   ```
 
 * <a name="method-parens"></a>
-    Use `def` with with parentheses when there are arguments. Omit the
-    parentheses when the method doesn't accept any arguments.
+    Use `def` without parentheses when there are arguments
 <sup>[[link](#method-parens)]</sup>
 
    ```Ruby
-   # bad
-   def some_method()
-     # body omitted
-   end
-
    # good
    def some_method
-     # body omitted
-   end
-
-   # not so good
-   def some_method_with_arguments(arg1, arg2)
      # body omitted
    end
 
@@ -913,24 +900,38 @@ condition](#safe-assignment-in-condition).
     end
     ```
 
+* <a name="no-method-def-parens"></a>
+  Omit parentheses when defining methods.
+<sup>[[link](#no-dsl-parens)]</sup>
+
+  ```Ruby
+  # bad
+  def something(foo, bar)
+   ...
+  end
+
+  # good
+  def something foo, bar
+   ...
+  end
+  ```
 
 * <a name="no-dsl-parens"></a>
-  Omit parentheses unless needed for precedence or if code becomes confusing
-   without them. Omit para
+  Omit parentheses when calling methods unless needed for precedence or if
+  code becomes confusing without them.
 <sup>[[link](#no-dsl-parens)]</sup>
 
   ```Ruby
   class Person
     attr_reader :name, :age
-
-    # omitted
   end
 
-  temperance = Person.new('Temperance', 30)
+  temperance = Person.new Temperance', 30
   temperance.name
 
   puts temperance.age
 
+  # Some method invocations just look better with parentheses. Use them.
   x = Math.sin(y)
   array.delete(e)
 
@@ -945,7 +946,7 @@ condition](#safe-assignment-in-condition).
   # bad
   user.set({ name: 'John', age: 45, permissions: { read: true } })
 
-  # good
+  # good. Notice use of parentheses here. It helps with readability)
   user.set(name: 'John', age: 45, permissions: { read: true })
   ```
 
@@ -1002,7 +1003,7 @@ condition](#safe-assignment-in-condition).
 
   # bad
   names.select do |name|
-    name.start_with?('S')
+    name.start_with? 'S'
   end.map { |name| name.upcase }
 
   # good
@@ -1030,9 +1031,9 @@ condition](#safe-assignment-in-condition).
   end
 
   # good
-  def with_tmp_dir(&block)
-    Dir.mktmpdir do |tmp_dir|
-      Dir.chdir(tmp_dir, &block)
+  def with_tmp_dir &block
+      Dir.mktmpdir do |tmp_dir|
+      Dir.chdir tmp_dir, &block
     end
   end
 
@@ -1047,12 +1048,12 @@ condition](#safe-assignment-in-condition).
 
   ```Ruby
   # bad
-  def some_method(some_arr)
+  def some_method some_arr
     return some_arr.size
   end
 
   # good
-  def some_method(some_arr)
+  def some_method some_arr
     some_arr.size
   end
   ```
@@ -1066,7 +1067,7 @@ condition](#safe-assignment-in-condition).
   # bad
   def ready?
     if self.last_reviewed_at > self.last_updated_at
-      self.worker.update(self.content, self.options)
+      self.worker.update self.content, self.options
       self.status = :in_progress
     end
     self.status == :verified
@@ -1075,7 +1076,7 @@ condition](#safe-assignment-in-condition).
   # good
   def ready?
     if last_reviewed_at > last_updated_at
-      worker.update(content, options)
+      worker.update content, options
       self.status = :in_progress
     end
     status == :verified
@@ -1092,22 +1093,22 @@ condition](#safe-assignment-in-condition).
     attr_accessor :options
 
     # ok
-    def initialize(options)
+    def initialize options
       self.options = options
       # both options and self.options are equivalent here
     end
 
     # bad
-    def do_something(options = {})
+    def do_something options = {}
       unless options[:when] == :later
-        output(self.options[:message])
+        output self.options[:message]
       end
     end
 
     # good
-    def do_something(params = {})
+    def do_something params = {}
       unless params[:when] == :later
-        output(options[:message])
+        output options[:message]
       end
     end
   end
@@ -1122,7 +1123,7 @@ condition](#safe-assignment-in-condition).
 
   ```Ruby
   # bad (+ a warning)
-  if v = array.grep(/foo/)
+  if v = array.grep /foo/
     do_something(v)
     ...
   end
@@ -1134,7 +1135,7 @@ condition](#safe-assignment-in-condition).
   end
 
   # good
-  v = array.grep(/foo/)
+  v = array.grep /foo/
   if v
     do_something(v)
     ...
@@ -1193,7 +1194,7 @@ condition](#safe-assignment-in-condition).
 
 * <a name="double-amper-preprocess"></a>
   Use `&&=` to preprocess variables that may or may not exist. Using `&&=`
-  will change the value only if it exists, removing the need to check its
+  will change the value only if it exists and is non-nil, removing the need to check its
   existence with `if`.
 <sup>[[link](#double-amper-preprocess)]</sup>
 
@@ -1229,7 +1230,7 @@ condition](#safe-assignment-in-condition).
   /something/ === some_string
 
   # good
-  something.is_a?(Array)
+  something.is_a? Array
   (1..100).include?(7)
   some_string =~ /something/
   ```
@@ -1327,36 +1328,34 @@ condition](#safe-assignment-in-condition).
   l.call(1)
   ```
 
-* <a name="underscore-unused-vars"></a>
-  Prefix with `_` unused block parameters and local variables. It's also
-  acceptable to use just `_` (although it's a bit less descriptive). This
-  convention is recognized by the Ruby interpreter and tools like RuboCop and
-  will suppress their unused variable warnings.
-<sup>[[link](#underscore-unused-vars)]</sup>
+* <a name="underscore-cache-variables"></a>
+  Prefix instance variables with `_` that are used for only local caching and
+  only used in the getter and setter methods.
+<sup>[[link](#underscore-cache-variables)]</sup>
 
   ```Ruby
   # bad
-  result = hash.map { |k, v| v + 1 }
+  def something x
+    @x ||= lookup
+  end
 
-  def something(x)
-    unused_var, used_var = something_else(x)
-    # ...
+  # bad
+  def something x
+    @_x ||= lookup
+  end
+
+
+  def something_else y
+    @_x + y
   end
 
   # good
-  result = hash.map { |_k, v| v + 1 }
-
-  def something(x)
-    _unused_var, used_var = something_else(x)
-    # ...
+  def something
+    @_something ||= lookup
   end
 
-  # good
-  result = hash.map { |_, v| v + 1 }
-
-  def something(x)
-    _, used_var = something_else(x)
-    # ...
+  def something= s
+    @_something = s
   end
   ```
 
@@ -1449,7 +1448,7 @@ condition](#safe-assignment-in-condition).
   ```
 
 * <a name="predicate-methods"></a>
-  Favor the use of predicate methods to explicit comparisons with `==`.
+  Favor the use of predicate methods, except .eql?, to explicit comparisons with `==`.
   Numeric comparisons are OK.
 <sup>[[link](#predicate-methods)]</sup>
 
@@ -1462,6 +1461,9 @@ condition](#safe-assignment-in-condition).
   end
 
   if x == nil
+  end
+
+  if x.eql? 3
   end
 
   # good
@@ -1516,12 +1518,8 @@ condition](#safe-assignment-in-condition).
   at_exit { puts 'Goodbye!' }
   ```
 
-* <a name="no-flip-flops"></a>
-  Avoid the use of flip-flops.
-<sup>[[link](#no-flip-flops)]</sup>
-
 * <a name="no-nested-conditionals"></a>
-  Avoid use of nested conditionals for flow of control.
+  Avoid use of deeply nested conditionals for flow of control.
 <sup>[[link](#no-nested-conditionals)]</sup>
 
   Prefer a guard clause when you can assert invalid data. A guard clause
@@ -1530,23 +1528,28 @@ condition](#safe-assignment-in-condition).
 
   ```Ruby
   # bad
-  def compute_thing(thing)
+  def compute_thing thing
     if thing[:foo]
-      update_with_bar(thing)
+      update_with_bar thing
       if thing[:foo][:bar]
-        partial_compute(thing)
+        partial_compute thing
       else
-        re_compute(thing)
+        re_compute thing
       end
     end
   end
 
   # good
-  def compute_thing(thing)
+  def compute_thing thing
     return unless thing[:foo]
-    update_with_bar(thing[:foo])
-    return re_compute(thing) unless thing[:foo][:bar]
-    partial_compute(thing)
+
+    update_with_bar thing[:foo]
+
+    if thing[:foo][:bar]
+      partial_compute thing
+    else
+      re_compute thing
+    end
   end
   ```
 
@@ -1568,13 +1571,9 @@ condition](#safe-assignment-in-condition).
   ```
 
 * <a name="map-fine-select-reduce-size"></a>
-  Prefer `map` over `collect`, `find` over `detect`, `select` over `find_all`,
+  Prefer `map` over `collect`, `detect` over `find`, `select` over `find_all`,
   `reduce` over `inject` and `size` over `length`. This is not a hard
   requirement; if the use of the alias enhances readability, it's ok to use it.
-  The rhyming methods are inherited from Smalltalk and are not common in other
-  programming languages. The reason the use of `select` is encouraged over
-  `find_all` is that it goes together nicely with `reject` and its name is
-  pretty self-explanatory.
 <sup>[[link](#map-fine-select-reduce-size)]</sup>
 
 * <a name="count-vs-size"></a>
@@ -1589,21 +1588,6 @@ condition](#safe-assignment-in-condition).
 
   # good
   some_hash.size
-  ```
-
-* <a name="flat-map"></a>
-  Use `flat_map` instead of `map` + `flatten`.  This does not apply for arrays
-  with a depth greater than 2, i.e.  if `users.first.songs == ['a', ['b','c']]`,
-  then use `map + flatten` rather than `flat_map`.  `flat_map` flattens the
-  array by 1, whereas `flatten` flattens it all the way.
-<sup>[[link](#flat-map)]</sup>
-
-  ```Ruby
-  # bad
-  all_songs = users.map(&:songs).flatten.uniq
-
-  # good
-  all_songs = users.flat_map(&:songs).uniq
   ```
 
 * <a name="reverse-each"></a>
@@ -1635,6 +1619,9 @@ condition](#safe-assignment-in-condition).
 
   # bad - identifier is a Bulgarian word, written with Latin letters (instead of Cyrillic)
   zaplata = 1_000
+
+  # bad - avoid abbreviations except in very small blocks.
+  req = 1_000
 
   # good
   salary = 1_000
@@ -1781,11 +1768,6 @@ condition](#safe-assignment-in-condition).
     end
   end
   ```
-
-* <a name="reduce-blocks"></a>
-  When using `reduce` with short blocks, name the arguments `|a, e|`
-  (accumulator, element).
-<sup>[[link](#reduce-blocks)]</sup>
 
 * <a name="other-arg"></a>
   When defining binary operators, name the argument `other`(`<<` and `[]` are

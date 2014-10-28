@@ -934,8 +934,6 @@ condition](#safe-assignment-in-condition).
   # Some method invocations just look better with parentheses. Use them.
   x = Math.sin(y)
   array.delete(e)
-
-  bowling.score.should == 0
   ```
 
 * <a name="no-braces-opts-hash"></a>

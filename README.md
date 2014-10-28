@@ -802,9 +802,6 @@ This a fork of the Style Guide by bbatsov.
 
   # good
   do_something unless some_condition
-
-  # another good option
-  some_condition || do_something
   ```
 
 * <a name="no-else-with-unless"></a>
@@ -916,31 +913,10 @@ condition](#safe-assignment-in-condition).
     end
     ```
 
-* <a name="loop-with-break"></a>
-  Use `Kernel#loop` with `break` rather than `begin/end/until` or
-  `begin/end/while` for post-loop tests.
-<sup>[[link](#loop-with-break)]</sup>
-
-  ```Ruby
-  # bad
-  begin
-    puts val
-    val += 1
-  end while val < 0
-
-  # good
-  loop do
-    puts val
-    val += 1
-    break unless val < 0
-  end
-  ```
 
 * <a name="no-dsl-parens"></a>
-  Omit parentheses around parameters for methods that are part of an internal
-  DSL (e.g. Rake, Rails, RSpec), methods that have "keyword" status in Ruby
-  (e.g. `attr_reader`, `puts`) and attribute access methods. Use parentheses
-  around the arguments of all other method invocations.
+  Omit parentheses unless needed for precedence or if code becomes confusing
+   without them. Omit para
 <sup>[[link](#no-dsl-parens)]</sup>
 
   ```Ruby
@@ -1826,9 +1802,7 @@ condition](#safe-assignment-in-condition).
 
 > Good code is its own best documentation. As you're about to add a
 > comment, ask yourself, "How can I improve the code so that this
-> comment isn't needed?" Improve the code and then document it to make
-> it even clearer. <br/>
-> -- Steve McConnell
+> comment isn't needed?" <br/>
 
 * <a name="no-comments"></a>
   Write self-documenting code and ignore the rest of this section. Seriously!
@@ -1840,7 +1814,8 @@ condition](#safe-assignment-in-condition).
 
 * <a name="hash-space"></a>
   Use one space between the leading `#` character of the comment and the text
-  of the comment.
+  of the comment. Trailing comments should have at least 2 spaces after the
+  code and before the `#`.
 <sup>[[link](#hash-space)]</sup>
 
 * <a name="english-syntax"></a>
@@ -1854,7 +1829,8 @@ condition](#safe-assignment-in-condition).
 
   ```Ruby
   # bad
-  counter += 1 # Increments counter by one.
+  # Increments counter by one.
+  counter += 1
   ```
 
 * <a name="comment-upkeep"></a>
@@ -1867,14 +1843,44 @@ condition](#safe-assignment-in-condition).
 
 * <a name="refactor-dont-comment"></a>
   Avoid writing comments to explain bad code. Refactor the code to make it
-  self-explanatory. (Do or do not - there is no try. --Yoda)
+  self-explanatory.
 <sup>[[link](#refactor-dont-comment)]</sup>
+
+* <a name="comment-on-new-lines"></a>
+  For comments that are more than a few words put them on the line before
+  the code separated by a blank line.
+
+  ```Ruby
+  # bad
+  counter += 1 # Be sure the world knows we have another bean that was counted.
+  ```
+
+  ```Ruby
+  # better
+
+  # Be sure the world knows we have another bean that was counted.
+  counter += 1
+  ```
+
+  ```Ruby
+  # best when there are multi-line comments followed by multi-line blocks of
+  # code that the comment is about. This format is also preferable for
+  # single line comments, but can result in a ton of vertical whitespace
+  # that is not always helpful. Use your best judgement.
+
+  # Be sure the world knows we have another bean that was counted
+  # and plant that really awesome bean.
+
+  counter += 1
+  awesome_bean.plant
+  ```
 
 ### Comment Annotations
 
 * <a name="annotate-above"></a>
-  Annotations should usually be written on the line immediately above the
-  relevant code.
+  Annotations should usually be written on the line above the
+  relevant code with a blank line before the line of code (see
+  comment vertical whitespace rules above).
 <sup>[[link](#annotate-above)]</sup>
 
 * <a name="annotate-keywords"></a>
@@ -1884,13 +1890,14 @@ condition](#safe-assignment-in-condition).
 
 * <a name="indent-annotations"></a>
   If multiple lines are required to describe the problem, subsequent lines
-  should be indented two spaces after the `#`.
+  should be indented to line up the copy.
 <sup>[[link](#indent-annotations)]</sup>
 
   ```Ruby
   def bar
     # FIXME: This has crashed occasionally since v3.2.1. It may
-    #   be related to the BarBazUtil upgrade.
+    #        be related to the BarBazUtil upgrade.
+
     baz(:quux)
   end
   ```
@@ -1926,15 +1933,9 @@ condition](#safe-assignment-in-condition).
   and should be refactored away.
 <sup>[[link](#hack)]</sup>
 
-* <a name="review"></a>
-  Use `REVIEW` to note anything that should be looked at to confirm it is
-  working as intended. For example: `REVIEW: Are we sure this is how the client
-  does X currently?`
-<sup>[[link](#review)]</sup>
-
 * <a name="document-annotations"></a>
-  Use other custom annotation keywords if it feels appropriate, but be sure to
-  document them in your project's `README` or similar.
+  Use other custom annotation keywords if it feels appropriate, but don't
+  over do it.
 <sup>[[link](#document-annotations)]</sup>
 
 ## Classes & Modules
@@ -1945,27 +1946,35 @@ condition](#safe-assignment-in-condition).
 
   ```Ruby
   class Person
+
     # extend and include go first
+
     extend SomeModule
     include AnotherModule
 
     # inner classes
+
     CustomErrorKlass = Class.new(StandardError)
 
     # constants are next
+
     SOME_CONSTANT = 20
 
     # afterwards we have attribute macros
+
     attr_reader :name
 
     # followed by other macros (if any)
+
     validates :name
 
     # public class methods are next in line
+
     def self.some_method
     end
 
     # followed by public instance methods
+
     def some_method
     end
 
@@ -1983,7 +1992,7 @@ condition](#safe-assignment-in-condition).
   ```
 
 * <a name="file-classes"></a>
-  Don't nest multi line classes within classes. Try to have such nested
+  Avoid nesting multi-line classes within classes. Try to have such nested
   classes each in their own file in a folder named like the containing class.
 <sup>[[link](#file-classes)]</sup>
 
@@ -2054,71 +2063,6 @@ condition](#safe-assignment-in-condition).
   end
   ```
 
-* <a name="module-function"></a>
-  Favor the use of `module_function` over `extend self` when you want to turn
-  a module's instance methods into class methods.
-<sup>[[link](#module-function)]</sup>
-
-  ```Ruby
-  # bad
-  module Utilities
-    extend self
-
-    def parse_something(string)
-      # do stuff here
-    end
-
-    def other_utility_method(number, string)
-      # do some more stuff
-    end
-  end
-
-  # good
-  module Utilities
-    module_function
-
-    def parse_something(string)
-      # do stuff here
-    end
-
-    def other_utility_method(number, string)
-      # do some more stuff
-    end
-  end
-  ```
-
-* <a name="liskov"></a>
-  When designing class hierarchies make sure that they conform to the [Liskov
-  Substitution
-  Principle](http://en.wikipedia.org/wiki/Liskov_substitution_principle).
-<sup>[[link](#liskov)]</sup>
-
-* <a name="solid-design"></a>
-  Try to make your classes as
-  [SOLID](http://en.wikipedia.org/wiki/SOLID_\(object-oriented_design\)) as
-  possible.
-<sup>[[link](#solid-design)]</sup>
-
-* <a name="define-to-s"></a>
-  Always supply a proper `to_s` method for classes that represent domain
-  objects.
-<sup>[[link](#define-to-s)]</sup>
-
-  ```Ruby
-  class Person
-    attr_reader :first_name, :last_name
-
-    def initialize(first_name, last_name)
-      @first_name = first_name
-      @last_name = last_name
-    end
-
-    def to_s
-      "#{@first_name} #{@last_name}"
-    end
-  end
-  ```
-
 * <a name="attr_family"></a>
   Use the `attr` family of functions to define trivial accessors or mutators.
 <sup>[[link](#attr_family)]</sup>
@@ -2163,46 +2107,6 @@ condition](#safe-assignment-in-condition).
   # good
   attr_accessor :something
   attr_reader :one, :two, :three
-  ```
-
-* <a name="struct-new"></a>
-  Consider using `Struct.new`, which defines the trivial accessors,
-  constructor and comparison operators for you.
-<sup>[[link](#struct-new)]</sup>
-
-  ```Ruby
-  # good
-  class Person
-    attr_accessor :first_name, :last_name
-
-    def initialize(first_name, last_name)
-      @first_name = first_name
-      @last_name = last_name
-    end
-  end
-
-  # better
-  Person = Struct.new(:first_name, :last_name) do
-  end
-  ````
-
-* <a name="no-extend-struct-new"></a>
-  Don't extend a `Struct.new` - it already is a new class. Extending it
-  introduces a superfluous class level and may also introduce weird errors if
-  the file is required multiple times.
-<sup>[[link](#no-extend-struct-new)]</sup>
-
-* <a name="factory-methods"></a>
-  Consider adding factory methods to provide additional sensible ways to
-  create instances of a particular class.
-<sup>[[link](#factory-methods)]</sup>
-
-  ```Ruby
-  class Person
-    def self.create(options_hash)
-      # body omitted
-    end
-  end
   ```
 
 * <a name="duck-typing"></a>
@@ -2320,7 +2224,8 @@ condition](#safe-assignment-in-condition).
     end
 
     # Also possible and convenient when you
-    # have to define many singleton methods.
+    # have to define many singlet on methods.
+
     class << self
       def first_method
         # body omitted
@@ -2448,7 +2353,7 @@ condition](#safe-assignment-in-condition).
   ```
 
 * <a name="dont-hide-exceptions"></a>
-  Don't suppress exceptions.
+  Don't suppress exceptions!!
 <sup>[[link](#dont-hide-exceptions)]</sup>
 
   ```Ruby
@@ -2514,7 +2419,7 @@ condition](#safe-assignment-in-condition).
     # exception handling
   end
 
-  # good
+  # good if you must (catching everything is bad)
   begin
     # a blind rescue rescues from StandardError, not Exception as many
     # programmers assume.
@@ -2522,7 +2427,7 @@ condition](#safe-assignment-in-condition).
     # exception handling
   end
 
-  # also good
+  # also good if you must (catching everything is bad)
   begin
     # an exception occurs here
 
@@ -2614,7 +2519,7 @@ condition](#safe-assignment-in-condition).
 <sup>[[link](#percent-i)]</sup>
 
   ```Ruby
-  # bad
+  # okay, but not great
   STATES = [:draft, :open, :closed]
 
   # good
@@ -2765,20 +2670,6 @@ condition](#safe-assignment-in-condition).
   batman.fetch(:powers) { get_batman_powers }
   ```
 
-* <a name="hash-values-at"></a>
-  Use `Hash#values_at` when you need to retrieve several values consecutively
-  from a hash.
-<sup>[[link](#hash-values-at)]</sup>
-
-  ```Ruby
-  # bad
-  email = data['email']
-  nickname = data['nickname']
-
-  # good
-  email, username = data.values_at('email', 'nickname')
-  ```
-
 * <a name="ordered-hashes"></a>
   Rely on the fact that as of Ruby 1.9 hashes are ordered.
 <sup>[[link](#ordered-hashes)]</sup>
@@ -2790,8 +2681,7 @@ condition](#safe-assignment-in-condition).
 ## Strings
 
 * <a name="string-interpolation"></a>
-  Prefer string interpolation and string formatting instead of string
-  concatenation:
+  Prefer string interpolation instead of string concatenation:
 <sup>[[link](#string-interpolation)]</sup>
 
   ```Ruby
@@ -2800,65 +2690,29 @@ condition](#safe-assignment-in-condition).
 
   # good
   email_with_name = "#{user.name} <#{user.email}>"
-
-  # good
-  email_with_name = format('%s <%s>', user.name, user.email)
   ```
 
 * <a name="pad-string-interpolation"></a>
-  Consider padding string interpolation code with space. It more clearly sets
-  the code apart from the string.
+  Do not pad string interpolation code with spaces.
 <sup>[[link](#pad-string-interpolation)]</sup>
 
   ```Ruby
+  # bad
   "#{ user.last_name }, #{ user.first_name }"
   ```
 
-* <a name="consistent-string-literals"></a>
-  Adopt a consistent string literal quoting style. There are two popular
-  styles in the Ruby community, both of which are considered good - single
-  quotes by default (Option A) and double quotes by default (Option B).
-<sup>[[link](#consistent-string-literals)]</sup>
-
-  * **(Option A)** Prefer single-quoted strings when you don't need
-    string interpolation or special symbols such as `\t`, `\n`, `'`,
-    etc.
-
-    ```Ruby
-    # bad
-    name = "Bozhidar"
-
-    # good
-    name = 'Bozhidar'
-    ```
-
-  * **(Option B)** Prefer double-quotes unless your string literal
-    contains `"` or escape characters you want to suppress.
-
-    ```Ruby
-    # bad
-    name = 'Bozhidar'
-
-    # good
-    name = "Bozhidar"
-    ```
-
-  The second style is arguably a bit more popular in the Ruby
-  community. The string literals in this guide, however, are
-  aligned with the first style.
-
-* <a name="no-character-literals"></a>
-  Don't use the character literal syntax `?x`. Since Ruby 1.9 it's basically
-  redundant - `?x` would interpreted as `'x'` (a string with a single character
-  in it).
-<sup>[[link](#no-character-literals)]</sup>
+* <a name="prefer-single-quoted-strings"></a>
+  Prefer single-quoted strings when you don't need
+  string interpolation or special symbols such as `\t`, `\n`, `'`,
+  etc.
+<sup>[[link](#prefer-single-quoted-strings)]</sup>
 
   ```Ruby
   # bad
-  char = ?c
+  name = "Bozhidar"
 
   # good
-  char = 'c'
+  name = 'Bozhidar'
   ```
 
 * <a name="curlies-interpolate"></a>
@@ -3219,28 +3073,14 @@ condition](#safe-assignment-in-condition).
 
 ## Misc
 
-* <a name="always-warn"></a>
-  Write `ruby -w` safe code.
-<sup>[[link](#always-warn)]</sup>
-
-* <a name="no-optional-hash-params"></a>
-  Avoid hashes as optional parameters. Does the method do too much? (Object
-  initializers are exceptions for this rule).
-<sup>[[link](#no-optional-hash-params)]</sup>
-
 * <a name="short-methods"></a>
-  Avoid methods longer than 10 LOC (lines of code). Ideally, most methods will
+  Avoid methods longer than 12 LOC (lines of code). Ideally, most methods will
   be shorter than 5 LOC. Empty lines do not contribute to the relevant LOC.
 <sup>[[link](#short-methods)]</sup>
 
 * <a name="too-many-params"></a>
-  Avoid parameter lists longer than three or four parameters.
+  Avoid parameter lists longer than three parameters. Use options hash.
 <sup>[[link](#too-many-params)]</sup>
-
-* <a name="private-global-methods"></a>
-  If you really need "global" methods, add them to Kernel and make them
-  private.
-<sup>[[link](#private-global-methods)]</sup>
 
 * <a name="instance-vars"></a>
   Use module instance variables instead of global variables.
@@ -3264,18 +3104,9 @@ condition](#safe-assignment-in-condition).
   Avoid `alias` when `alias_method` will do.
 <sup>[[link](#alias-method)]</sup>
 
-* <a name="optionparser"></a>
-  Use `OptionParser` for parsing complex command line options and `ruby -s`
-  for trivial command line options.
-<sup>[[link](#optionparser)]</sup>
-
 * <a name="time-now"></a>
   Prefer `Time.now` over `Time.new` when retrieving the current system time.
 <sup>[[link](#time-now)]</sup>
-
-* <a name="functional-code"></a>
-  Code in a functional way, avoiding mutation when that makes sense.
-<sup>[[link](#functional-code)]</sup>
 
 * <a name="no-arg-mutations"></a>
   Do not mutate arguments unless that is the purpose of the method.
@@ -3292,70 +3123,3 @@ condition](#safe-assignment-in-condition).
 * <a name="common-sense"></a>
   Use common sense.
 <sup>[[link](#common-sense)]</sup>
-
-## Tools
-
-Here's some tools to help you automatically check Ruby code against
-this guide.
-
-### RuboCop
-
-[RuboCop][] is a Ruby code style
-checker based on this style guide. RuboCop already covers a
-significant portion of the Guide, supports both MRI 1.9 and MRI 2.0
-and has good Emacs integration.
-
-### RubyMine
-
-[RubyMine](http://www.jetbrains.com/ruby/)'s code inspections are
-[partially based](http://confluence.jetbrains.com/display/RUBYDEV/RubyMine+Inspections)
-on this guide.
-
-# Contributing
-
-The guide is still a work in progress - some rules are lacking examples, some
-rules don't have examples that illustrate them clearly enough. Improving such rules
-is a great (and simple way) to help the Ruby community!
-
-In due time these issues will (hopefully) be addressed - just keep them in mind
-for now.
-
-Nothing written in this guide is set in stone. It's my desire to work
-together with everyone interested in Ruby coding style, so that we could
-ultimately create a resource that will be beneficial to the entire Ruby
-community.
-
-Feel free to open tickets or send pull requests with improvements. Thanks in
-advance for your help!
-
-You can also support the project (and RuboCop) with financial
-contributions via [gittip](https://www.gittip.com/bbatsov).
-
-[![Support via Gittip](https://rawgithub.com/twolfson/gittip-badge/0.2.0/dist/gittip.png)](https://www.gittip.com/bbatsov)
-
-## How to Contribute?
-
-It's easy, just follow the [contribution guidelines](https://github.com/bbatsov/ruby-style-guide/blob/master/CONTRIBUTING.md).
-
-# License
-
-![Creative Commons License](http://i.creativecommons.org/l/by/3.0/88x31.png)
-This work is licensed under a [Creative Commons Attribution 3.0 Unported License](http://creativecommons.org/licenses/by/3.0/deed.en_US)
-
-# Spread the Word
-
-A community-driven style guide is of little use to a community that
-doesn't know about its existence. Tweet about the guide, share it with
-your friends and colleagues. Every comment, suggestion or opinion we
-get makes the guide just a little bit better. And we want to have the
-best possible guide, don't we?
-
-Cheers,<br/>
-[Bozhidar](https://twitter.com/bbatsov)
-
-[PEP-8]: http://www.python.org/dev/peps/pep-0008/
-[rails-style-guide]: https://github.com/bbatsov/rails-style-guide
-[pickaxe]: http://pragprog.com/book/ruby4/programming-ruby-1-9-2-0
-[trpl]: http://www.amazon.com/Ruby-Programming-Language-David-Flanagan/dp/0596516177
-[transmuter]: https://github.com/TechnoGate/transmuter
-[RuboCop]: https://github.com/bbatsov/rubocop

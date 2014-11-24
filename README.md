@@ -497,6 +497,23 @@ This a fork of the Style Guide by bbatsov.
   # comment line
   # another comment line
   ```
+* Active Record chains: put period in front when using new lines for active record chains
+
+  ```Ruby
+  # bad
+  Animals.
+    select('distinct(foo)').
+    where(id: 8299832).
+    order('name desc')
+
+
+  # good
+  Animals
+    .select('distinct(foo)')
+    .where(id: 8299832)
+    .order('name desc')
+  ```
+
 
 ## Syntax
 

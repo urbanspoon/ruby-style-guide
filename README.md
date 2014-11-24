@@ -497,7 +497,7 @@ This a fork of the Style Guide by bbatsov.
   # comment line
   # another comment line
   ```
-* Active Record chains: put period in front when using new lines for active record chains
+* Method chains: put periods in front when using new lines for method chains
 
   ```Ruby
   # bad

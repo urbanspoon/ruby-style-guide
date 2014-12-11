@@ -1944,6 +1944,26 @@ condition](#safe-assignment-in-condition).
 
 ## Classes & Modules
 
+
+* <a name="nest-classes-in-modules"></a>
+  Declare classes in modules by nesting and not using ::
+<sup>[[link](#consistent-classes)]</sup>
+   
+   
+   ```Ruby
+   # Bad
+   class Vehicles::Car
+   ...
+   end
+   
+  # Good
+  module Vehicles
+    class Car
+    ...
+    end
+  end
+  ```
+  
 * <a name="consistent-classes"></a>
   Use a consistent structure in your class definitions.
 <sup>[[link](#consistent-classes)]</sup>

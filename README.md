@@ -1947,7 +1947,7 @@ condition](#safe-assignment-in-condition).
 
 * <a name="nest-classes-in-modules"></a>
   Declare classes in modules by nesting and not using ::
-<sup>[[link](#consistent-classes)]</sup>
+<sup>[[link](#nesting-classes-in-modules)]</sup>
    
    
    ```Ruby
